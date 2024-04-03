@@ -70,46 +70,6 @@ class CMakeBuild(build_ext):
             os.makedirs(self.build_temp)
         print("|||||CMAKE ARGS|||||", cmake_args)
         subprocess.check_call(['cmake', ext.sourcedir] + cmake_args, cwd=self.build_temp, env=env)
-	    #starting bug fix
-        build_make_file = 'build/temp.linux-x86_64-3.7/src/spconv/CMakeFiles/spconv.dir/build.make'
-        link_file = 'build/temp.linux-x86_64-3.7/src/spconv/CMakeFiles/spconv.dir/link.txt'
-        dlink = 'build/temp.linux-x86_64-3.7/src/spconv/CMakeFiles/spconv.dir/dlink.txt'
-	
-        #build_make_file = 'build/temp.linux-x86_64-cpython-37/src/spconv/CMakeFiles/spconv.dir/build.make'
-        #link_file = 'build/temp.linux-x86_64-cpython-37/src/spconv/CMakeFiles/spconv.dir/link.txt'
-        #dlink = 'build/temp.linux-x86_64-cpython-37/src/spconv/CMakeFiles/spconv.dir/dlink.txt'
-        for file in [build_make_file, link_file]:
-            with open(file) as f:
-                newText = f.read().replace('/usr/local/cuda', env['CUDA_HOME'])
-            with open(file, "w") as f:
-                f.write(newText)
-        
-        for file in [build_make_file, link_file]:
-            with open(file) as f:
-                newText = f.read().replace('/usr/lib/cuda/lib64/libnvToolsExt.so', '/opt/cuda/10.0/lib64/libnvToolsExt.so')
-            with open(file, "w") as f:
-                f.write(newText)
-
-        for file in [build_make_file, link_file]:
-            with open(file) as f:
-                newText = f.read().replace('/usr/lib/cuda/lib64/libcudart.so', '/opt/cuda/10.0/lib64/libcudart.so')
-            with open(file, "w") as f:
-                f.write(newText)
-
-
-        for file in [build_make_file, link_file]:
-            with open(file) as f:
-                newText = f.read().replace('/usr/lib/cuda/lib64/libculibos.a', '/opt/cuda/10.0/lib64/libculibos.a')
-            with open(file, "w") as f:
-                f.write(newText)
-
-        for file in [dlink]:
-            with open(file) as f:
-                newText = f.read().replace('/usr/local/cuda/lib64/libculibos.a', '/opt/cuda/10.0/lib64/libculibos.a')
-            with open(file, "w") as f:
-                f.write(newText)
-        
-	    #ending bug fix
         subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=self.build_temp)
 
 
